@@ -1,0 +1,19 @@
+@startuml
+class Customer {
+    - name: String
+    - email: String
+    + placeOrder(): void
+}
+
+class Order {
+    - orderID: int
+    - date: date
+    + calculateTotal(): double
+}
+
+class PremiumCustomer {
+    + getRewards(): void
+}
+
+
+@enduml
