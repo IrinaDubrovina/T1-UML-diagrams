@@ -1,0 +1,52 @@
+@startuml
+skinparam actor {
+    BackgroundColor #95C8D8
+    borderColor Black
+}
+skinparam participant {
+    BackgroundColor #F0F0F0
+    borderColor Green
+}
+skinparam database {
+    BackgroundColor #FFD700
+    borderColor Black
+}
+actor Customer as C
+participant "Web UI" as UI
+participant "Order Controller" as OC
+participant "Payment Service" as PS
+database "Database" as DB
+participant "Notification Service" as NS
+
+group "1. Оформление заказа"
+C -> UI : initiateOrder(orderDetails)
+activate C
+activate UI
+UI -> OC : processOrder(orderDetails)
+activate OC
+OC -> DB : saveOrder(orderDetails)
+activate DB
+DB -[#green]-> OC : OrderSaved
+deactivate DB
+end
+
+group "2. Оплата"
+OC -> PS : processPayment(paymentinfo)
+activate PS
+alt Успешная оплата
+PS -[#green]-> OC : paymentSuccess(paymentConfirmation) 
+OC -[#lightblue]-> NS : sendOrderNotofocation(orderID)
+else Ошибка оплаты
+PS -[#Red]-> OC : paymentFailure(errorMessage) 
+end alt
+deactivate PS
+end
+
+group "3. Подтверждение"
+OC -> UI : oderConfirmation(confirmationDetails)
+deactivate OC
+UI --> C : displayConfirmation(confirmationDetails)
+deactivate UI
+deactivate C
+end
+@enduml

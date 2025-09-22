@@ -14,6 +14,7 @@ class Order {
 class PremiumCustomer {
     + getRewards(): void
 }
-
-
+Customer "1" -- "0..*" Order :
+places
+Customer <|-- PremiumCustomer
 @enduml
