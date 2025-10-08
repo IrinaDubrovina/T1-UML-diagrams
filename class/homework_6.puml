@@ -1,0 +1,96 @@
+@startuml
+
+class Customer {
+    - customerID: Integer
+    - name: String
+    - orders: List<Order>
+}
+
+class Order {
+    - orderID: Integer
+    - orderDate: Date
+    - items: List<Item>
+    + calculateTotal() : Double
+}
+
+class Item {
+    - itemID: Integer
+    - itemName: String
+    - price: Double
+}
+
+class Employee {
+    - emplID: Integer
+    - emplName: String
+    - department: <reference> Department
+    + getEmployeeInfo() : String
+}
+
+class User {
+    - userID: Integer
+    - userName: String
+    - profile: <reference> Profile
+    + getUserDetails() : String
+}
+
+class PaymentProcessor {
+    + processPayment() : Boolean
+}
+
+class House {
+    - houseID: Integer
+    - address: String
+}
+
+class Manager {
+    - bonus: Double
+    + getManagerInfo() : String
+}
+
+class Department {
+    - deptID: Integer
+    - deptName: String
+    + getDepartmentInfo() : String
+}
+
+class Profile {
+    - profileID: Integer
+    - bio: String
+    - avatarUrl: String
+    + getProfileSummary() : String
+}
+
+class Enrollment {
+    - enrollmentDate: Date
+    - grade: String
+}
+
+class Course {
+    - courseID: Integer
+    - courseName: String
+}
+
+class Stusent {
+    - studentID: Integer
+    - name: String
+}
+
+Customer --> Employee
+Customer "1" -- "0..*" Order: клиент размещает заказы (ассоциация, 0..*)
+Customer --> User
+Order "0..1" --> "1" Employee: клиент назначается
+Order "1" *-- "1..*" Item: заказ содержит элементы (композиция, 1..*)
+Order ..> PaymentProcessor: заказ использует процессор платежей (зависимость)
+Employee "1" --> "1" Department: сотрудник пренадлежит отделу (ассоциация, обязательная связь)
+Employee "1" --> "0..1" House: сотрудник владеет домом (ассоциация, опциональная, 0..1)
+Employee <|-- Manager: наследование (менеджер, подтип сотрудника)
+Manager "1" --> "1" Department: менеджер управляет отделом (ассоциация, роль)
+House "1" *-- "1..*" Room: состоит из комнат (композиция, 1..*)
+User ..> PaymentProcessor: пользователь инициирует платеж (зависимость)
+User "1" --> "0..1" Profile: содержит профиль (ассоциация, 0..1)
+User <|-- Student: наследование (стдент, подтип пользователя)
+Student "1" -- "0..*" Enrollment: студент зачисляется на курсы (ассоциация, 0..*)
+Enrollment "1" -- "1*" Course: зачисление относится к конкретному курсу (ассоциация, 1)
+Course --> Department: курс предложен отделом (ассоциация, связь)
+
+@enduml

@@ -1,38 +1,38 @@
 @startuml
 abstract class Payment {
-    - amount : double
-    - paymentDate : data
-    - transactionId : int 
+    - amount: double
+    - paymentDate: data
+    - transactionId: int 
     + Payment(amount: double, paymentDate: data, transactionId: int)
-    + processPayment() : void
-    + getAmount() : double
-    + getPaymentData() : data
-    + getTransactionID() : int
-    + processPayment() : void
+    + processPayment(): void
+    + getAmount(): double
+    + getPaymentData(): data
+    + getTransactionID(): int
+    + processPayment(): void
 }
 
 class CashPayment {
-    - cashProvided : double
-    + calculateСhange() : void
-    + getCashProvided() : double
-    + processPayment() : void
+    - cashProvided: double
+    + calculateСhange(): void
+    + getCashProvided(): double
+    + processPayment(): void
 }
 
 class CardPayment {
-    - cardNumber : int
-    - custName : string
-    - validDate : data
-    + ValidationCard() : void
-    + getCardNumber() : int
-    + getCustName() : string
-    + getValidDate() : data
-    + processPayment() : void
+    - cardNumber: int
+    - custName: string
+    - validDate: data
+    + ValidationCard(): void
+    + getCardNumber(): int
+    + getCustName(): string
+    + getValidDate(): data
+    + processPayment(): void
 }
 
 class PaymentManager {
     - List<Payment> payment
     + registerPayment(p: Payment) 
-    + processAllPayments() : void
+    + processAllPayments(): void
 }
 
 Payment <|-- CashPayment
