@@ -1,4 +1,4 @@
-@startuml
+@startuml homework 5
 abstract class Payment {
     - amount: double
     - paymentDate: data

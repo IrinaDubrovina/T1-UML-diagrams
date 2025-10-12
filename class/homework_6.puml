@@ -1,30 +1,4 @@
-@startuml
-
-class Customer {
-    - customerID: Integer
-    - name: String
-    - orders: List<Order>
-}
-
-class Order {
-    - orderID: Integer
-    - orderDate: Date
-    - items: List<Item>
-    + calculateTotal() : Double
-}
-
-class Item {
-    - itemID: Integer
-    - itemName: String
-    - price: Double
-}
-
-class Employee {
-    - emplID: Integer
-    - emplName: String
-    - department: <reference> Department
-    + getEmployeeInfo() : String
-}
+@startuml homework 6
 
 class User {
     - userID: Integer
@@ -33,18 +7,28 @@ class User {
     + getUserDetails() : String
 }
 
+class Student {
+    + getStudentInfo() : String
+}
+
+class Instructor {
+    - department: <reference> Department
+    + getInstuctorInfo() : String
+}
+
+class Course {
+    - courseID: Integer
+    - courseName: String
+}
+
+class Item {
+    - itemID: Integer
+    - itemName: String
+    - price: Double
+}
+
 class PaymentProcessor {
     + processPayment() : Boolean
-}
-
-class House {
-    - houseID: Integer
-    - address: String
-}
-
-class Manager {
-    - bonus: Double
-    + getManagerInfo() : String
 }
 
 class Department {
@@ -65,30 +49,15 @@ class Enrollment {
     - grade: String
 }
 
-class Course {
-    - courseID: Integer
-    - courseName: String
-}
-
-class Stusent {
-    - studentID: Integer
-    - name: String
-}
-
-Customer --> Employee
-Customer "1" -- "0..*" Order: клиент размещает заказы (ассоциация, 0..*)
-Customer --> User
-Order "0..1" --> "1" Employee: клиент назначается
-Order "1" *-- "1..*" Item: заказ содержит элементы (композиция, 1..*)
-Order ..> PaymentProcessor: заказ использует процессор платежей (зависимость)
-Employee "1" --> "1" Department: сотрудник пренадлежит отделу (ассоциация, обязательная связь)
-Employee "1" --> "0..1" House: сотрудник владеет домом (ассоциация, опциональная, 0..1)
-Employee <|-- Manager: наследование (менеджер, подтип сотрудника)
-Manager "1" --> "1" Department: менеджер управляет отделом (ассоциация, роль)
-House "1" *-- "1..*" Room: состоит из комнат (композиция, 1..*)
+Student "1" -- "0..*" Course: студент выбирает курс (ассоциация, 0..*)
+Course "0..1" --> "1" Instructor: преподаватель назначается на курс
+Course "1" *-- "1..*" Item: заказ содержит элементы (композиция, 1..*)
+Course ..> PaymentProcessor: заказ использует процессор платежей (зависимость)
+Instructor "1" --> "1" Department: сотрудник пренадлежит отделу (ассоциация, обязательная связь)
 User ..> PaymentProcessor: пользователь инициирует платеж (зависимость)
 User "1" --> "0..1" Profile: содержит профиль (ассоциация, 0..1)
-User <|-- Student: наследование (стдент, подтип пользователя)
+User <|-- Student: наследование (студент, подтип пользователя)
+User <|-- Instructor: наследование (преподаватель, подтип пользователя)
 Student "1" -- "0..*" Enrollment: студент зачисляется на курсы (ассоциация, 0..*)
 Enrollment "1" -- "1*" Course: зачисление относится к конкретному курсу (ассоциация, 1)
 Course --> Department: курс предложен отделом (ассоциация, связь)

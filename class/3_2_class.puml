@@ -1,4 +1,4 @@
-@startuml
+@startuml 3.2
 class Customer {
     - name: String
     - email: String
