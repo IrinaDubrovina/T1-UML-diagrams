@@ -1,0 +1,29 @@
+@startuml Рассмотрение кредитной заявки
+left to right direction
+actor "Клиент" as Client
+actor "ВИП Клиент" as VIP
+actor "Кредитный менеджер" as Manager
+actor "Служба безопасности" as SecurityService
+actor "Бюро кредитных историй" as CreditBureau
+
+rectangle "Рассмотрение кредитной заявки"{
+    (Оформить кредит) as UC1
+    (Оформить ипотеку) as UC11
+    (Оценить клиента) as UC2
+    (Запросить дополнительные документы) as UC22
+    (Принять решение о выдаче кредита) as UC3
+}
+
+Client <|-- VIP
+UC1 <|-- UC11
+Client --> UC1
+VIP --> UC1: "использует привилегии"
+UC1 .> UC2: <<include>>
+UC2 <.. UC3: "если требуется Андеррайтинг"
+UC11 .> UC22: <<include>>
+Manager -right-> UC22
+Manager -right-> UC3
+UC2 -up-> SecurityService: Запрос благонадежности клиента
+UC2 -up-> CreditBureau: Запрос кредитной истории клиента
+
+@enduml
