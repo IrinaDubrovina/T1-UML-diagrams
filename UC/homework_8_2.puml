@@ -1,0 +1,66 @@
+@startuml Онлайн перевод между счетами
+autonumber  
+skinparam actor {
+    BackgroundColor #95C8D8
+    borderColor Black
+}
+skinparam participant {
+    BackgroundColor #F0F0F0
+    borderColor Green
+}
+skinparam database {
+    BackgroundColor #FFD700
+    borderColor Black
+}
+actor Client as C
+participant "Mobile App" as MA
+participant "Backend" as B
+database "Database" as DB
+boundary "SMS Service" as NS #green
+
+C -> MA: initiateTransaction(transDetails)
+activate C
+activate MA
+MA -> B: checkBalance(cardDetails)
+activate B
+B -> DB: getBalance(cardDetails)
+activate DB
+DB --> B: balance
+deactivate DB
+B --> MA: balance
+
+alt Достаточно средств
+MA -> B: processTransaction
+opt Сумма более 5000 р
+MA -> NS: initiateConfirmNotification(transactionDatails)
+activate NS
+NS --> C: clientNotification(Code)
+deactivate NS
+C -> MA: confirmTransaction(Code)
+MA -> B: checkCode(Code)
+
+alt Код верный
+B -> DB: updateBalance(transDatails)
+activate DB
+DB -> DB: updateProcess
+DB ->> B: response
+deactivate DB 
+B -[#green]-> MA : transSuccess(transConfirmation) 
+else Код неверный
+B -[#Red]-> MA: transFailure(errorMessage) 
+end alt
+
+
+end
+B ->> DB: updateBalance(transDatails)
+activate DB
+DB -> DB: updateProcess
+DB --> B: response
+deactivate DB
+B -[#green]-> MA : transSuccess(transConfirmation) 
+else Недостаточно средств
+B -[#Red]-> MA : transFailure(errorMessage) 
+end alt
+deactivate B
+
+@enduml
